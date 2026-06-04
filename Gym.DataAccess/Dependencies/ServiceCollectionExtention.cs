@@ -24,6 +24,7 @@ namespace Gym.DataAccess.Dependencies
             services.AddScoped<AuditColumns>();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IMemberRepository, MemberRepository>();
 
             return services;
         }

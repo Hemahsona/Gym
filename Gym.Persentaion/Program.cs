@@ -1,3 +1,4 @@
+using Gym.BusinessLogic.Dependencies;
 using Gym.DataAccess.Data.Context;
 using Gym.DataAccess.Data.Seeder;
 using Gym.DataAccess.Dependencies;
@@ -16,6 +17,7 @@ namespace Gym.Persentaion
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDataAccess(connectionString);
+            builder.Services.AddBusinessLogic();
             
             
 

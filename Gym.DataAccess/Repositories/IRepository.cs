@@ -12,11 +12,11 @@ namespace Gym.DataAccess.Repositories
         Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<TEntity> GetByIdIncludingDeletedAsync(int id, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-        Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         void Update(TEntity entity);
         void Deleted(TEntity entity);
-        Task<int> SaveChanges(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }
 }

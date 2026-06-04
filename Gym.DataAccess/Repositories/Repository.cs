@@ -24,8 +24,10 @@ namespace Gym.DataAccess.Repositories
         public async Task<TEntity> GetByIdIncludingDeletedAsync(int id, CancellationToken cancellationToken = default)
             => await _dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-        public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
-            => await _dbSet.AnyAsync(e => e.Id == id, cancellationToken);
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+            => await _dbSet.AnyAsync(predicate, cancellationToken);
+        public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate).ToListAsync(cancellationToken);
 
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
             => await _dbContext.AddAsync(entity);
@@ -40,10 +42,8 @@ namespace Gym.DataAccess.Repositories
         public void Update(TEntity entity)
             => _dbContext.Update(entity);
 
-        public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-        => await _dbSet.Where(predicate).ToListAsync(cancellationToken);
 
-        public Task<int> SaveChanges(CancellationToken cancellationToken = default)
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         => _dbContext.SaveChangesAsync(cancellationToken);
 
     }

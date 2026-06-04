@@ -63,10 +63,10 @@ namespace Gym.DataAccess.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserType = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    JoinDate = table.Column<DateOnly>(type: "date", nullable: true),
                     City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    BuildingNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    BuildingNumber = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     Specialties = table.Column<int>(type: "int", nullable: true),
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -86,8 +86,8 @@ namespace Gym.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Height = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Weight = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Height = table.Column<decimal>(type: "decimal(18,2)", maxLength: 10, nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", maxLength: 10, nullable: false),
                     BloodType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
