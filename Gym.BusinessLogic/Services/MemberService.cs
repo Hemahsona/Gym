@@ -1,4 +1,5 @@
-﻿using Gym.BusinessLogic.ViewModels.Member;
+﻿using Gym.BusinessLogic.ViewModels.HealthRecord;
+using Gym.BusinessLogic.ViewModels.Member;
 using Gym.DataAccess.Data.OwnedType;
 using Gym.DataAccess.Models;
 using Gym.DataAccess.Repositories;
@@ -26,16 +27,18 @@ namespace Gym.BusinessLogic.Services
             });
         }
 
-        public async Task<bool> CreateAsync(CreateMemberViewModel model, CancellationToken ct)
+        public async Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct)
         {
-            if(await memberRepository.ExistsAsync(m => m.Email == model.Email, ct))
+            if (await memberRepository.IsEmailExists(model.Email, null,ct))
             {
-                return false;
+                return Result.Failure("Email already exists.");
             }
-            if (await memberRepository.ExistsAsync(m => m.Phone == model.Phone, ct))
+
+            if (await memberRepository.IsPhoneExists(model.Phone, null,ct))
             {
-                return false;
+                return Result.Failure("Phone number already exists.");
             }
+
             var member = new Member
             {
                 Name = model.Name,
@@ -60,10 +63,89 @@ namespace Gym.BusinessLogic.Services
             };
             await memberRepository.AddAsync(member, ct);
             await memberRepository.SaveChangesAsync(ct);
-            return true;
+            return Result.Success();
         }
 
 
 
+        public async Task<MemberDetailsViewModel> GetDetailsAsync(int id, CancellationToken ct)
+        {
+            var member = await memberRepository.GetByIdAsync(id: id, includes: m => m.MemberShips, cancellationToken: ct);
+            if (member is null) return null;
+
+            var now = DateTime.Now;
+
+            var activeMembership = member.MemberShips.FirstOrDefault(ms => ms.EndDate >= now);
+
+            return new MemberDetailsViewModel
+            {
+                Id = member.Id,
+                Name = member.Name,
+                Email = member.Email,
+                Phone = member.Phone,
+                Photo = member.Photo,
+                Gender = member.Gender.ToString(),
+                Address = $"{member.Address.BuildingNumber} {member.Address.Street}, {member.Address.City}",
+                PlanName = activeMembership?.Plan.Name ?? "No Active Plan",
+                DateOfBirth = member.DateOfBirth.ToString("yyyy-MM-dd"),
+                MemberShipStartDate = activeMembership?.StartDate.ToString("yyyy-MM-dd") ?? "-",
+                MemberShipEndDate = activeMembership?.EndDate.ToString("yyyy-MM-dd") ?? "-",
+
+            };
+        }
+
+        public async Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id, CancellationToken ct)
+        {
+            var health = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct, includes: h => h.HealthRecord);
+            if (health is null) return null;
+            return new HealthRecordDetailsModelView
+            {
+
+                Height = health.HealthRecord.Height.ToString(),
+                Weight = health.HealthRecord.Weight.ToString(),
+                BloodType = health.HealthRecord.BloodType.ToString(),
+                Note = health.HealthRecord.Note
+            };
+        }
+
+        public async Task<EditMemberViewModel> GetForEditAsync(int id, CancellationToken ct)
+        {
+            var member = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct);
+
+            if (member is null) return null;
+
+            return new EditMemberViewModel
+            {
+                Name = member.Name,
+                Photo = member.Photo,
+                Email = member.Email,
+                Phone = member.Phone,
+                DateOfBirth = member.DateOfBirth,
+                Gender = member.Gender,
+                BuildingNumber = member.Address.BuildingNumber,
+                City = member.Address.City,
+                Street = member.Address.Street,
+            };
+
+        }
+
+        public async Task<Result> EditAsync(int id, EditMemberViewModel model, CancellationToken ct)
+        {
+            var member = await memberRepository.GetByIdAsync(id:id, cancellationToken: ct);
+
+            if (member is null) return Result.Failure("member not found");
+            if(await memberRepository.IsEmailExists(model.Email, id, ct)) return Result.Failure("Email already exists.");
+            if(await memberRepository.IsPhoneExists(model.Phone, id, ct)) return Result.Failure("Phone already exists.");
+
+            member.Email = model.Email;
+            member.Phone = model.Phone;
+            member.Address.BuildingNumber = model.BuildingNumber;
+            member.Address.City = model.City;
+            member.Address.Street = model.Street;
+
+            memberRepository.Update(member);
+            await memberRepository.SaveChangesAsync(ct);
+            return Result.Success();
+        }
     }
 }

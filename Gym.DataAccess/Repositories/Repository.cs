@@ -15,11 +15,11 @@ namespace Gym.DataAccess.Repositories
         private readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
-          => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+            => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
 
-        public async Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-            => await _dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        public async Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes)
+            => await ApplyInclude(_dbSet.AsQueryable(), includes).FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public async Task<TEntity> GetByIdIncludingDeletedAsync(int id, CancellationToken cancellationToken = default)
             => await _dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
@@ -45,6 +45,13 @@ namespace Gym.DataAccess.Repositories
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         => _dbContext.SaveChangesAsync(cancellationToken);
+
+        private static IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, IEnumerable<Expression<Func<TEntity, object>>> includes)
+        {
+            foreach (var include in includes)
+                query = query.Include(include);
+            return query;
+        }
 
     }
 }
