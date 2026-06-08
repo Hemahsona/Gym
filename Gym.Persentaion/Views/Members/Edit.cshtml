@@ -14,11 +14,8 @@
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="mb-1 text-primary-color">@Model.Name</h2>
-                                <form asp-controller="Members" asp-action="Edit" asp-route-id="@Context.Request.RouteValues["id"]" method="post">
+                                <form asp-controller="Members" asp-action="Edit" method="post">
                                     <input type="hidden" asp-for="Name"/>
-                                    <input type="hidden" asp-for="Photo"/>
-                                    <input type="hidden" asp-for="DateOfBirth"/>
-                                    <input type="hidden" asp-for="Gender"/>
                                     <div class="mt-4 text-start">
                                         <div class="row g-3">
                                             <div class="col-12">

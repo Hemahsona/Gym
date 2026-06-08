@@ -9,6 +9,7 @@ namespace Gym.DataAccess.Repositories
     {
         Task<bool> IsEmailExists(string normalizeEmail, int? excludedId = null,CancellationToken cancellationToken = default);
         Task<bool> IsPhoneExists(string normalizePhone, int? excludedId = null, CancellationToken cancellationToken = default);
+        Task<bool> HasUpcomingBookingAsync(int id, CancellationToken cancellationToken = default);
 
     }
 }

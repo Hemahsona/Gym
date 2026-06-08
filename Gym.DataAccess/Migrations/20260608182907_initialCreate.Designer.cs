@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym.DataAccess.Migrations
 {
     [DbContext(typeof(GymDBContext))]
-    [Migration("20260603232414_initialCreate")]
+    [Migration("20260608182907_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -32,6 +32,9 @@ namespace Gym.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BookedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

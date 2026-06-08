@@ -29,12 +29,12 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct)
         {
-            if (await memberRepository.IsEmailExists(model.Email, null,ct))
+            if (await memberRepository.IsEmailExists(model.Email, null, ct))
             {
                 return Result.Failure("Email already exists.");
             }
 
-            if (await memberRepository.IsPhoneExists(model.Phone, null,ct))
+            if (await memberRepository.IsPhoneExists(model.Phone, null, ct))
             {
                 return Result.Failure("Phone number already exists.");
             }
@@ -131,11 +131,12 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result> EditAsync(int id, EditMemberViewModel model, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdAsync(id:id, cancellationToken: ct);
+            var member = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct);
 
             if (member is null) return Result.Failure("member not found");
-            if(await memberRepository.IsEmailExists(model.Email, id, ct)) return Result.Failure("Email already exists.");
-            if(await memberRepository.IsPhoneExists(model.Phone, id, ct)) return Result.Failure("Phone already exists.");
+            if(member.Name != model.Name) return Result.Failure("Name cannot be changed");
+            if (await memberRepository.IsEmailExists(model.Email, id, ct)) return Result.Failure("Email already exists.");
+            if (await memberRepository.IsPhoneExists(model.Phone, id, ct)) return Result.Failure("Phone already exists.");
 
             member.Email = model.Email;
             member.Phone = model.Phone;
@@ -144,6 +145,21 @@ namespace Gym.BusinessLogic.Services
             member.Address.Street = model.Street;
 
             memberRepository.Update(member);
+            await memberRepository.SaveChangesAsync(ct);
+            return Result.Success();
+        }
+
+        public async Task<Result> DeleteAsync(int id, CancellationToken ct)
+        {
+            var member = await memberRepository.GetByIdIncludingDeletedAsync(id, ct);
+
+            if (member is null) return Result.Failure("Member not found");
+
+            if (await memberRepository.HasUpcomingBookingAsync(id, ct))
+                return Result.Failure("Cannot delete member with active membership.");
+
+
+            memberRepository.SoftDelete(member);
             await memberRepository.SaveChangesAsync(ct);
             return Result.Success();
         }

@@ -76,11 +76,33 @@ namespace Gym.Persentaion.Controllers
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError(string.Empty, result.Error!);
-                TempData["Error"] = "Member update failed";
+                TempData["Error"] = "Member creation failed";
                 return View(model);
             }
-            TempData["Success"] = "Member updated successfully";
+            TempData["Success"] = "Member created successfully";
             return RedirectToAction(nameof(Index));
         }
-    }
-}
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id, CancellationToken ct)
+        {
+            var deletedMember = await member.GetDetailsAsync(id, ct);
+            if (deletedMember == null)
+                return NotFound();
+            ViewBag.id = deletedMember.Id;
+            return View();
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed([FromRoute] int id, CancellationToken ct)
+        {
+            Result result = await member.DeleteAsync(id, ct);
+            if (!result.IsSuccess)
+            {
+                TempData["Error"] = "Member deletion failed";
+                return View();
+            }
+            TempData["Success"] = "Member deleted successfully";
+            return RedirectToAction(nameof(Index));
+        }
+}}

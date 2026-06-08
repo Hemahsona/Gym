@@ -14,5 +14,6 @@ namespace Gym.BusinessLogic.Services
         Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id,CancellationToken ct);
         Task<EditMemberViewModel> GetForEditAsync(int id, CancellationToken ct);
         Task<Result> EditAsync(int id,EditMemberViewModel model, CancellationToken ct);
+        Task<Result> DeleteAsync(int id, CancellationToken ct);
     }
 }

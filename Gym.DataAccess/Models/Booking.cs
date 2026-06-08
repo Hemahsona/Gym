@@ -12,6 +12,7 @@ namespace Gym.DataAccess.Models
         public Member Member { get; set; }
         public int SessionId { get; set; }
         public Session Session { get; set; }
+        public DateTime BookedAt { get; set; }
 
     }
 }

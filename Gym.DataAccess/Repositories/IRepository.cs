@@ -15,7 +15,7 @@ namespace Gym.DataAccess.Repositories
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         void Update(TEntity entity);
-        void Deleted(TEntity entity);
+        void SoftDelete(TEntity entity);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }

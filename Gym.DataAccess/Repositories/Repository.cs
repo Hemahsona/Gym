@@ -32,7 +32,7 @@ namespace Gym.DataAccess.Repositories
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
             => await _dbContext.AddAsync(entity);
 
-        public void Deleted(TEntity entity)
+        public void SoftDelete(TEntity entity)
         {
             entity.IsDeleted = true;
             _dbContext.Update(entity);
