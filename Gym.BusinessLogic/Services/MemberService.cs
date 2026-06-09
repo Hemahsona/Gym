@@ -1,5 +1,6 @@
 ﻿using Gym.BusinessLogic.ViewModels.HealthRecord;
 using Gym.BusinessLogic.ViewModels.Member;
+using Gym.DataAccess.Data.Enums;
 using Gym.DataAccess.Data.OwnedType;
 using Gym.DataAccess.Models;
 using Gym.DataAccess.Repositories;
@@ -70,7 +71,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<MemberDetailsViewModel> GetDetailsAsync(int id, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdAsync(id: id, includes: m => m.MemberShips, cancellationToken: ct);
+            var member = await memberRepository.GetByIdAsync(id: id, includes: [m => m.MemberShips], cancellationToken: ct);
             if (member is null) return null;
 
             var now = DateTime.Now;
@@ -96,15 +97,30 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id, CancellationToken ct)
         {
-            var health = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct, includes: h => h.HealthRecord);
+            var health = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct, includes: [h => h.HealthRecord]);
             if (health is null) return null;
             return new HealthRecordDetailsModelView
             {
 
                 Height = health.HealthRecord.Height.ToString(),
                 Weight = health.HealthRecord.Weight.ToString(),
-                BloodType = health.HealthRecord.BloodType.ToString(),
+                BloodType = ToDisplayBloodType(health.HealthRecord.BloodType),
                 Note = health.HealthRecord.Note
+            };
+        }
+        private static string ToDisplayBloodType(BloodType bloodType)
+        {
+            return bloodType switch
+            {
+                BloodType.APositive => "A+",
+                BloodType.ANegative => "A-",
+                BloodType.BPositive => "B+",
+                BloodType.BNegative => "B-",
+                BloodType.ABPositive => "AB+",
+                BloodType.ABNegative => "AB-",
+                BloodType.OPositive => "O+",
+                BloodType.ONegative => "O-",
+                _ => "Unknown"
             };
         }
 
