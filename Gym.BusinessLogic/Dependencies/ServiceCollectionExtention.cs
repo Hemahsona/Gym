@@ -15,6 +15,7 @@ namespace Gym.BusinessLogic.Dependencies
         public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
         {
             services.AddScoped<IMemberService, MemberService>();
+
             return services;
         }
     }

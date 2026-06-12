@@ -4,15 +4,20 @@ using System.Text;
 
 namespace Gym.BusinessLogic
 {
-    public class Result
+    public sealed record Result(bool success, string? error = null, ResultKind resultKind = ResultKind.Ok)
     {
-        public bool IsSuccess { get; init; }
-        public string? Error { get; init; }
+        public static Result Success() => new(true);
+        public static Result Failure(string error, ResultKind resultKind = ResultKind.Conflict) => new(false, error, resultKind);
+        //public static Result NotFound(string error = "Not found") => new(false, error, ResultKind.NotFound);
+        //public static Result Validation(string error) => new(false, error, ResultKind.ValidationError);
 
-        public static Result Success()
-            => new() { IsSuccess = true };
+    }
 
-        public static Result Failure(string error)
-            => new() { IsSuccess = false, Error = error };
+    public sealed class Result<T>(bool success, T? value = default, string? error = null, ResultKind resultKind = ResultKind.Ok)
+    {
+        public static Result<T> IsSuccess(T value) => new(true, value);
+        public static Result<T> Failure(string error, ResultKind resultKind = ResultKind.Conflict) => new(false, default, error, resultKind);
+        //public static Result<T> NotFound(string error = "Not found") => new(false, default, error, ResultKind.NotFound);
+        //public static Result<T> Validation(string error) => new(false, default, error, ResultKind.ValidationError);
     }
 }

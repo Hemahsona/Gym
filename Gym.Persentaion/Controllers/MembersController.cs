@@ -24,9 +24,9 @@ namespace Gym.Persentaion.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             Result result = await member.CreateAsync(model, ct);
-            if (!result.IsSuccess)
+            if (!result.success)
             {
-                ModelState.AddModelError(string.Empty, result.Error!);
+                ModelState.AddModelError(string.Empty, result.error !);
                 TempData["Error"] = "Member creation failed";
                 return View(model);
             }
@@ -73,9 +73,9 @@ namespace Gym.Persentaion.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             Result result = await member.EditAsync(id, model, ct);
-            if (!result.IsSuccess)
+            if (!result.success)
             {
-                ModelState.AddModelError(string.Empty, result.Error!);
+                ModelState.AddModelError(string.Empty, result.error!);
                 TempData["Error"] = "Member creation failed";
                 return View(model);
             }
@@ -97,7 +97,7 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> DeleteConfirmed([FromRoute] int id, CancellationToken ct)
         {
             Result result = await member.DeleteAsync(id, ct);
-            if (!result.IsSuccess)
+            if (!result.success)
             {
                 TempData["Error"] = "Member deletion failed";
                 return View();

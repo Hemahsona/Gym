@@ -1,4 +1,5 @@
-﻿using Gym.BusinessLogic.ViewModels.HealthRecord;
+﻿using Gym.BusinessLogic.Mappings;
+using Gym.BusinessLogic.ViewModels.HealthRecord;
 using Gym.BusinessLogic.ViewModels.Member;
 using Gym.DataAccess.Data.Enums;
 using Gym.DataAccess.Data.OwnedType;
@@ -16,16 +17,7 @@ namespace Gym.BusinessLogic.Services
         {
 
             var member = await unitOfWork.Members.GetAllAsync(ct);
-            return member.Select(m => new MemberIndexViewModel
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Email = m.Email,
-                Phone = m.Phone,
-                Photo = m.Photo,
-                JoinDate = m.JoinDate,
-                Gender = m.Gender.ToString(),
-            });
+            return member.Select(m => m.ToMemberIndexViewModel());
         }
 
         public async Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct)
@@ -40,28 +32,8 @@ namespace Gym.BusinessLogic.Services
                 return Result.Failure("Phone number already exists.");
             }
 
-            var member = new Member
-            {
-                Name = model.Name,
-                Email = model.Email,
-                Phone = model.Phone,
-                DateOfBirth = model.DateOfBirth,
-                Gender = model.Gender,
-                JoinDate = DateOnly.FromDateTime(DateTime.Now),
-                Address = new Address
-                {
-                    BuildingNumber = model.BuildingNumber,
-                    City = model.City,
-                    Street = model.Street
-                },
-                HealthRecord = new HealthRecord
-                {
-                    Height = model.HealthRecordViewModel.Height,
-                    Weight = model.HealthRecordViewModel.Weight,
-                    BloodType = model.HealthRecordViewModel.BloodType,
-                    Note = model.HealthRecordViewModel.Note,
-                }
-            };
+            var member = model.ToCreateMemberViewModel();
+
             await unitOfWork.Members.AddAsync(member, ct);
             await unitOfWork.Members.SaveChangesAsync(ct);
             return Result.Success();
@@ -130,18 +102,8 @@ namespace Gym.BusinessLogic.Services
 
             if (member is null) return null;
 
-            return new EditMemberViewModel
-            {
-                Name = member.Name,
-                Photo = member.Photo,
-                Email = member.Email,
-                Phone = member.Phone,
-                DateOfBirth = member.DateOfBirth,
-                Gender = member.Gender,
-                BuildingNumber = member.Address.BuildingNumber,
-                City = member.Address.City,
-                Street = member.Address.Street,
-            };
+            return member.ToEditViewModel();
+
 
         }
 
