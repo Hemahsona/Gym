@@ -54,6 +54,5 @@ namespace Gym.DataAccess.Repositories
                 query = query.Include(include);
             return query;
         }
-
     }
 }

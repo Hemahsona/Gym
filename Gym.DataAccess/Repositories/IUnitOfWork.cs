@@ -1,0 +1,19 @@
+﻿using Gym.DataAccess.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Gym.DataAccess.Repositories
+{
+    public interface IUnitOfWork : IDisposable
+    {
+        IMemberRepository Members { get; }
+        IBookingRepository Bookings { get; }
+        IPlanRepository Plans { get; }
+        IRepository<HealthRecord> HealthRecords { get; }
+        IRepository<Category> Categories { get; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+
+    }
+}

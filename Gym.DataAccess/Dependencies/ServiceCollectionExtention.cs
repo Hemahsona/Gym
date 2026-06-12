@@ -20,11 +20,12 @@ namespace Gym.DataAccess.Dependencies
                 options.AddInterceptors(
                     sp.GetRequiredService<AuditColumns>());
             });
-            services.AddScoped<IPlanRepository, PlanRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<AuditColumns>();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IMemberRepository, MemberRepository>();
+            //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //services.AddScoped<IMemberRepository, MemberRepository>();
 
             return services;
         }

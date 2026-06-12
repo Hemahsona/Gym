@@ -7,21 +7,21 @@ namespace Gym.Persentaion.Controllers
 {
     public class PlansController : Controller
     {
-        private readonly IRepository<Plan> _planRepository;
-        public PlansController(IRepository<Plan> planRepository) 
-        { 
-            _planRepository = planRepository; 
+        private readonly IUnitOfWork _unitOfWork;
+        public PlansController(IUnitOfWork unitOfWork) 
+        {
+            _unitOfWork = unitOfWork; 
         }
         public async Task<IActionResult> Index() 
         {
-            var plan = await _planRepository.GetAllAsync();
+            var plan = await _unitOfWork.Plans.GetAllAsync();
             return View(plan); 
         }
         public async Task<IActionResult> Details(int id)
         {
             if (id <= 0) 
                 return NotFound(); 
-            var plan = await _planRepository.GetByIdAsync(id);
+            var plan = await _unitOfWork.Plans.GetByIdAsync(id);
             if (plan is null) return RedirectToAction(nameof(Index));
             return View(plan); 
         }

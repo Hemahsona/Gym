@@ -10,12 +10,12 @@ using System.Text;
 
 namespace Gym.BusinessLogic.Services
 {
-    public class MemberService(IMemberRepository memberRepository) : IMemberService
+    public class MemberService(IUnitOfWork unitOfWork) : IMemberService
     {
         public async Task<IEnumerable<MemberIndexViewModel>> GetAllAsync(CancellationToken ct)
         {
 
-            var member = await memberRepository.GetAllAsync(ct);
+            var member = await unitOfWork.Members.GetAllAsync(ct);
             return member.Select(m => new MemberIndexViewModel
             {
                 Id = m.Id,
@@ -30,12 +30,12 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct)
         {
-            if (await memberRepository.IsEmailExists(model.Email, null, ct))
+            if (await unitOfWork.Members.IsEmailExists(model.Email, null, ct))
             {
                 return Result.Failure("Email already exists.");
             }
 
-            if (await memberRepository.IsPhoneExists(model.Phone, null, ct))
+            if (await unitOfWork.Members.IsPhoneExists(model.Phone, null, ct))
             {
                 return Result.Failure("Phone number already exists.");
             }
@@ -62,8 +62,8 @@ namespace Gym.BusinessLogic.Services
                     Note = model.HealthRecordViewModel.Note,
                 }
             };
-            await memberRepository.AddAsync(member, ct);
-            await memberRepository.SaveChangesAsync(ct);
+            await unitOfWork.Members.AddAsync(member, ct);
+            await unitOfWork.Members.SaveChangesAsync(ct);
             return Result.Success();
         }
 
@@ -71,7 +71,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<MemberDetailsViewModel> GetDetailsAsync(int id, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdAsync(id: id, includes: [m => m.MemberShips], cancellationToken: ct);
+            var member = await unitOfWork.Members.GetByIdAsync(id: id, includes: [m => m.MemberShips], cancellationToken: ct);
             if (member is null) return null;
 
             var now = DateTime.Now;
@@ -97,7 +97,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id, CancellationToken ct)
         {
-            var health = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct, includes: [h => h.HealthRecord]);
+            var health = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct, includes: [h => h.HealthRecord]);
             if (health is null) return null;
             return new HealthRecordDetailsModelView
             {
@@ -126,7 +126,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<EditMemberViewModel> GetForEditAsync(int id, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct);
+            var member = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct);
 
             if (member is null) return null;
 
@@ -147,12 +147,12 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result> EditAsync(int id, EditMemberViewModel model, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdAsync(id: id, cancellationToken: ct);
+            var member = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct);
 
             if (member is null) return Result.Failure("member not found");
             if(member.Name != model.Name) return Result.Failure("Name cannot be changed");
-            if (await memberRepository.IsEmailExists(model.Email, id, ct)) return Result.Failure("Email already exists.");
-            if (await memberRepository.IsPhoneExists(model.Phone, id, ct)) return Result.Failure("Phone already exists.");
+            if (await unitOfWork.Members.IsEmailExists(model.Email, id, ct)) return Result.Failure("Email already exists.");
+            if (await unitOfWork.Members.IsPhoneExists(model.Phone, id, ct)) return Result.Failure("Phone already exists.");
 
             member.Email = model.Email;
             member.Phone = model.Phone;
@@ -160,23 +160,23 @@ namespace Gym.BusinessLogic.Services
             member.Address.City = model.City;
             member.Address.Street = model.Street;
 
-            memberRepository.Update(member);
-            await memberRepository.SaveChangesAsync(ct);
+            unitOfWork.Members.Update(member);
+            await unitOfWork.Members.SaveChangesAsync(ct);
             return Result.Success();
         }
 
         public async Task<Result> DeleteAsync(int id, CancellationToken ct)
         {
-            var member = await memberRepository.GetByIdIncludingDeletedAsync(id, ct);
+            var member = await unitOfWork.Members.GetByIdIncludingDeletedAsync(id, ct);
 
             if (member is null) return Result.Failure("Member not found");
 
-            if (await memberRepository.HasUpcomingBookingAsync(id, ct))
+            if (await unitOfWork.Members.HasUpcomingBookingAsync(id, ct))
                 return Result.Failure("Cannot delete member with active membership.");
 
 
-            memberRepository.SoftDelete(member);
-            await memberRepository.SaveChangesAsync(ct);
+            unitOfWork.Members.SoftDelete(member);
+            await unitOfWork.Members.SaveChangesAsync(ct);
             return Result.Success();
         }
     }
