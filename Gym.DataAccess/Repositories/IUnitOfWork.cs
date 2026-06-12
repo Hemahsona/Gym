@@ -12,6 +12,7 @@ namespace Gym.DataAccess.Repositories
         IPlanRepository Plans { get; }
         IRepository<HealthRecord> HealthRecords { get; }
         IRepository<Category> Categories { get; }
+        IRepository<Session> Sessions { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
 

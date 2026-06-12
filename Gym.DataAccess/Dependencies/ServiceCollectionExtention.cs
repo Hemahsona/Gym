@@ -1,6 +1,5 @@
 ﻿using Gym.DataAccess.Data.Context;
 using Gym.DataAccess.Interceptor;
-using Gym.DataAccess.Queries;
 using Gym.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,7 @@ namespace Gym.DataAccess.Dependencies
                 options.AddInterceptors(
                     sp.GetRequiredService<AuditColumns>());
             });
-            services.AddScoped<ISessionQueryService, SessionQueryService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<AuditColumns>();
