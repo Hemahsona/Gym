@@ -15,15 +15,18 @@ namespace Gym.DataAccess.Repositories
         private IPlanRepository _plans;
         private IRepository<HealthRecord> _healthRecords;
         private IRepository<Category> _categories;
-        private IRepository<Session> _session;
+        private ISessionRepository _session;
+        private ITrainerReposatiory _trainers;
+
 
         public IMemberRepository Members => _members ??= new MemberRepository(_dbContext);
+        public ITrainerReposatiory Trainers => _trainers ??= new TrainerRepository(_dbContext);
         public IBookingRepository Bookings => _bookings ??= new BookingRepository(_dbContext);
 
         public IPlanRepository Plans => _plans ??= new PlanRepository(_dbContext);
         public IRepository<HealthRecord> HealthRecords => _healthRecords ??= new Repository<HealthRecord>(_dbContext);
         public IRepository<Category> Categories => _categories ??= new Repository<Category>(_dbContext);
-        public IRepository<Session> Sessions => _session ??= new Repository<Session>(_dbContext);
+        public ISessionRepository Sessions => _session ??= new SessionRepository(_dbContext);
 
 
 

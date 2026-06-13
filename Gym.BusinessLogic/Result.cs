@@ -13,7 +13,7 @@ namespace Gym.BusinessLogic
 
     }
 
-    public sealed class Result<T>(bool success, T? value = default, string? error = null, ResultKind resultKind = ResultKind.Ok)
+    public sealed record Result<T>(bool success, T? value = default, string? error = null, ResultKind resultKind = ResultKind.Ok)
     {
         public static Result<T> IsSuccess(T value) => new(true, value);
         public static Result<T> Failure(string error, ResultKind resultKind = ResultKind.Conflict) => new(false, default, error, resultKind);

@@ -21,7 +21,15 @@ namespace Gym.BusinessLogic.ViewModels.Session
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
-        public TimeSpan Duration => EndDate - StartDate;
+        //public TimeSpan Duration => EndDate - StartDate;
+        public string Duration
+        {
+            get
+            {
+                TimeSpan duration = EndDate - StartDate;
+                return $"{(int)duration.TotalHours} Hours {duration.Minutes} Minutes";
+            }
+        }
         public string HeaderClass => Status switch
         {
             SessionStatus.Upcoming => "bg-primary",

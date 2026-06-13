@@ -3,6 +3,7 @@ using Gym.DataAccess.Models;
 using Gym.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 namespace Gym.Persentaion.Controllers
 {
     public class PlansController : Controller

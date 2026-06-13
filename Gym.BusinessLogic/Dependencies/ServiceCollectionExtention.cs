@@ -16,6 +16,7 @@ namespace Gym.BusinessLogic.Dependencies
         {
             services.AddScoped<IMemberService, MemberService>();
             services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<ITrainerService, TrainerService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
