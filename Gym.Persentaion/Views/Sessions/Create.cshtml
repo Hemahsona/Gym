@@ -56,7 +56,7 @@ else if (TempData["ErrorMessage"] != null)
                                     Trainer <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="TrainerId" class="form-select"
-                                asp-items="new SelectList(Model.Trainers, nameof(TrainerLockupItem.Id), nameof(TrainerLockupItem.Name))">
+                                        asp-items="new SelectList(Model.Trainers, nameof(TrainerLockupItem.Id), nameof(TrainerLockupItem.Name))">
                                     <option value="">Select Trainer</option>
                                 </select>
                                 <span asp-validation-for="TrainerId" class="text-danger"></span>

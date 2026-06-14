@@ -11,7 +11,7 @@ namespace Gym.BusinessLogic.ViewModels.Session
         public string Speciality { get; set; }
         public string CategoryName { get; set; }
         public string TrainerName { get; set; }
-        public int MyProperty { get; set; }
+        public string DisplayDate => $"{StartDate:MMM dd yyyy}";
         public string Description { get; set; } = null!;
         public string BookedCount { get; set; }
         public SessionStatus Status { get; set; }
@@ -30,6 +30,7 @@ namespace Gym.BusinessLogic.ViewModels.Session
                 return $"{(int)duration.TotalHours} Hours {duration.Minutes} Minutes";
             }
         }
+        public string TimeRangeDisplay => $"{StartDate: hh mm tt}"; 
         public string HeaderClass => Status switch
         {
             SessionStatus.Upcoming => "bg-primary",

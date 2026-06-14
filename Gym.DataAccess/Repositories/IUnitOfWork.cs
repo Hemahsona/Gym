@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gym.DataAccess.Repositories
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork 
     {
         IMemberRepository Members { get; }
         IBookingRepository Bookings { get; }

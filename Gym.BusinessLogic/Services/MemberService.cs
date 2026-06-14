@@ -104,7 +104,6 @@ namespace Gym.BusinessLogic.Services
 
             return member.ToEditViewModel();
 
-
         }
 
         public async Task<Result> EditAsync(int id, EditMemberViewModel model, CancellationToken ct)

@@ -3,6 +3,8 @@ using Gym.BusinessLogic.ViewModels.Session;
 using Gym.BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Gym.DataAccess.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Gym.DataAccess.Repositories;
 
 namespace Gym.Persentaion.Controllers
 {
@@ -40,9 +42,26 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Create(SessionCreateViewModel model, CancellationToken ct)
         {
 
-
+            //var categoriesResult = await sessionService.GetGategoryAsync(ct);
             var result = await sessionService.CreateAsync(model, ct);
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)       
+        {
+            var result = await sessionService.GetForEditAsync(id);
+
+            return View(result.value);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(SessionEditViewModel model, CancellationToken ct)
+        {
+            var result = await sessionService.EditAsync(model, ct);
             return RedirectToAction(nameof(Index));
         }
 

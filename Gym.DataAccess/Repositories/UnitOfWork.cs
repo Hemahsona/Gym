@@ -35,10 +35,7 @@ namespace Gym.DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
             => _dbContext.SaveChangesAsync(cancellationToken);

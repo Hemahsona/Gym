@@ -13,6 +13,9 @@ namespace Gym.BusinessLogic.Services
         Task<Result<IReadOnlyList<CategoryLockupItem>>> GetGategoryAsync( CancellationToken ct = default);
         Task<Result<IReadOnlyList<TrainerLockupItem>>> GetTrainersAsync(CancellationToken ct = default);
         Task<Result> CreateAsync(SessionCreateViewModel model, CancellationToken ct = default);
+        Task<Result<SessionEditViewModel>> GetForEditAsync(int id, CancellationToken ct = default);
+        Task<Result> EditAsync(SessionEditViewModel model, CancellationToken ct = default);
+        
 
     }
 }
