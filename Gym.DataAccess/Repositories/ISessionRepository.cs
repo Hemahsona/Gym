@@ -9,6 +9,6 @@ namespace Gym.DataAccess.Repositories
     public interface ISessionRepository : IRepository<Session>
     {
         Task<List<Session>> HasTrainerAsync(Expression<Func<Session, object>>[]? includes = default, CancellationToken cancellationToken = default);
-
+        
     }
 }

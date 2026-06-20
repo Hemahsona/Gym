@@ -27,10 +27,10 @@ namespace Gym.BusinessLogic.ViewModels.Session
         [Display(Name = "Trainer")]
         public int TrainerId { get; set; }
 
-        [Required(ErrorMessage = "Category is required")]
-        [Display(Name = "Category")]
-        public int CategoryId { get; set; }
-        //public IReadOnlyList<CategoryLockupItem> Categories { get; set; } = default!;
+        //[Required(ErrorMessage = "Category is required")]
+        //[Display(Name = "Category")]
+        //public int CategoryId { get; set; }
+        public IReadOnlyList<CategoryLockupItem> Categories { get; set; } = default!;
         public IReadOnlyList<TrainerLockupItem> Trainers { get; set; } = default!;
 
     }

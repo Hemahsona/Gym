@@ -13,7 +13,10 @@ namespace Gym.BusinessLogic.Dependencies
     public static class ServiceCollectionExtention 
     {
         public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
-        {
+        {services.AddScoped<ISessionScheduleService, SessionScheduleService>();
+            services.AddScoped<IMemberShipService, MemberShipService>();
+            services.AddScoped<IDashBoardService, DashBoardService>();
+            services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IMemberService, MemberService>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<ITrainerService, TrainerService>();

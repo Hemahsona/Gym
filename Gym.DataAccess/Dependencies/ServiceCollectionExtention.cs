@@ -13,17 +13,16 @@ namespace Gym.DataAccess.Dependencies
     {
         public static IServiceCollection AddDataAccess(this IServiceCollection services, string connectionString)
         {
+            services.AddSingleton<AuditColumns>();
             services.AddDbContext<GymDBContext>((sp, options) =>
             {
                 options.UseSqlServer(connectionString);
-
                 options.AddInterceptors(
                     sp.GetRequiredService<AuditColumns>());
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //services.AddScoped<IPlanRepository, PlanRepository>();
-            services.AddScoped<AuditColumns>();
 
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             //services.AddScoped<IMemberRepository, MemberRepository>();

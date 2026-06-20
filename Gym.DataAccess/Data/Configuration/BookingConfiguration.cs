@@ -19,7 +19,9 @@ namespace Gym.DataAccess.Data.Configuration
                 .WithMany(b => b.Bookings)
                 .HasForeignKey(s => s.SessionId)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+            builder.HasQueryFilter(u => !u.IsDeleted);
+
+
         }
     }
 }

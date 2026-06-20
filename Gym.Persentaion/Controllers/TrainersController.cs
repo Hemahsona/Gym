@@ -4,6 +4,7 @@ using Gym.BusinessLogic.ViewModels.Trainer;
 using Gym.DataAccess.Models;
 using Gym.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Gym.Persentaion.Controllers
 {
@@ -33,5 +34,65 @@ namespace Gym.Persentaion.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        public async Task<IActionResult> Details(int id, CancellationToken ct)
+        {
+            var result = await trainer.GetDetailsAsync(id, ct);
+            if (!result.success)
+                return NotFound();
+            return View(result.value);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id, CancellationToken ct)
+        {
+            var result = await trainer.GetForEditAsync(id, ct);
+            if(!result.success)
+                return RedirectToAction(nameof(Index));
+            return View(result.value);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Edit(TrainerEditViewModel model, int id, CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            var result = await trainer.EditAsync(model, id, ct);
+            if(!result.success)
+            {
+                ModelState.AddModelError(string.Empty, result.error!);
+                TempData["Error"] = "trainer edit failed";
+                return View(model);
+            }
+            TempData["success"] = "Trainer Edit successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id, CancellationToken ct)
+        {
+            var result = await trainer.GetDetailsAsync(id, ct);
+            if (result == null)
+                return NotFound();
+            ViewBag.id = result.value.Id;
+            return View();
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken ct)
+        {
+            var result = await trainer.DeleteAsync(id, ct);
+            if (!result.success)
+            {
+                ModelState.AddModelError(string.Empty, result.error!);
+                TempData["Error"] = "trainer deletion failed";
+                return View();
+            }
+            TempData["Success"] = "trainer deleted successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

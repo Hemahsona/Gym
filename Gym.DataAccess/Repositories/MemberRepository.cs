@@ -11,6 +11,14 @@ namespace Gym.DataAccess.Repositories
     {
         private readonly GymDBContext _dbContext = dbContext;
 
+        public Task<Member> GetWithMemberShipAync(int id, CancellationToken cancellationToken = default)
+        {
+            return _dbContext.Set<Member>()
+                .Include(m => m.MemberShips)
+                .ThenInclude(ms => ms.Plan)
+                .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+        }
+
         public async Task<bool> HasUpcomingBookingAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Booking>()

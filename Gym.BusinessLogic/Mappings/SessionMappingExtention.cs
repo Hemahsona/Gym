@@ -17,8 +17,8 @@ namespace Gym.BusinessLogic.Mappings
                 Description = session.Description,
                 CategoryName = session.Category.Name,
                 BookedCount = session.Bookings.Count.ToString(),
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now,
+                StartDate = session.StartDate,
+                EndDate = session.StartDate,
                 Capacity = session.Capacity,
                 Speciality = session.Category.Name,
             };

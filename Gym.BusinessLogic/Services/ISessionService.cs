@@ -11,10 +11,12 @@ namespace Gym.BusinessLogic.Services
         Task<IReadOnlyList<SessionIndexViewModel>> GetIndexItemsAsync(CancellationToken ct = default);
         Task<Result<SessionDetailsViewModel>> GetDetailsAsync(int id, CancellationToken ct = default);
         Task<Result<IReadOnlyList<CategoryLockupItem>>> GetGategoryAsync( CancellationToken ct = default);
-        Task<Result<IReadOnlyList<TrainerLockupItem>>> GetTrainersAsync(CancellationToken ct = default);
+        Task<Result<IReadOnlyList<TrainerLockupItem>>> GetTrainersAsync(int id, CancellationToken ct = default);
         Task<Result> CreateAsync(SessionCreateViewModel model, CancellationToken ct = default);
         Task<Result<SessionEditViewModel>> GetForEditAsync(int id, CancellationToken ct = default);
-        Task<Result> EditAsync(SessionEditViewModel model, CancellationToken ct = default);
+        Task<Result> EditAsync(SessionEditViewModel model, int id, CancellationToken ct = default);
+
+        Task<Result> DeleteAsync(int id, CancellationToken ct = default);
         
 
     }

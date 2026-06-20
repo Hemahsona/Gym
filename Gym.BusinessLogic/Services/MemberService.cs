@@ -33,7 +33,7 @@ namespace Gym.BusinessLogic.Services
             }
 
             var member = model.ToCreateMemberViewModel();
-
+            
             await unitOfWork.Members.AddAsync(member, ct);
             await unitOfWork.Members.SaveChangesAsync(ct);
             return Result.Success();
@@ -43,7 +43,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<MemberDetailsViewModel> GetDetailsAsync(int id, CancellationToken ct)
         {
-            var member = await unitOfWork.Members.GetByIdAsync(id: id, includes: [m => m.MemberShips], cancellationToken: ct);
+            var member = await unitOfWork.Members.GetWithMemberShipAync(id: id,  cancellationToken: ct);
             if (member is null) return null;
 
             var now = DateTime.Now;
@@ -69,7 +69,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id, CancellationToken ct)
         {
-            var health = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct, includes: [h => h.HealthRecord]);
+            var health = await unitOfWork.Members.GetByIdAsync(id: id, trackChanger: false, cancellationToken: ct, includes: [h => h.HealthRecord]);
             if (health is null) return null;
             return new HealthRecordDetailsModelView
             {
@@ -98,7 +98,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<EditMemberViewModel> GetForEditAsync(int id, CancellationToken ct)
         {
-            var member = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct);
+            var member = await unitOfWork.Members.GetByIdAsync(id: id, trackChanger: true, cancellationToken: ct);
 
             if (member is null) return null;
 
@@ -108,7 +108,7 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result> EditAsync(int id, EditMemberViewModel model, CancellationToken ct)
         {
-            var member = await unitOfWork.Members.GetByIdAsync(id: id, cancellationToken: ct);
+            var member = await unitOfWork.Members.GetByIdAsync(id: id, trackChanger: true, cancellationToken: ct);
 
             if (member is null) return Result.Failure("member not found");
             if(member.Name != model.Name) return Result.Failure("Name cannot be changed");

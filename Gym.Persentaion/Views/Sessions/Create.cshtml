@@ -1,25 +1,5 @@
 ﻿@using Gym.BusinessLogic.ViewModels.Session
 @model SessionCreateViewModel
-@* @{
-    ViewData["Title"] = "Create Session";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@if (TempData["SuccessMessage"] != null)
-{
-    <div id="Alert" class="alert alert-success alert-dismissible fade show">
-        <i class="bi bi-check-circle-fill me-2"></i>
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-else if (TempData["ErrorMessage"] != null)
-{
-    <div id="Alert" class="alert alert-danger alert-dismissible fade show">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-} *@
 <div class="container mt-4">
     <partial name="_TempData" />
     <header class="mb-4">

@@ -22,7 +22,6 @@ namespace Gym.DataAccess.Data.Configuration
                 st.HasCheckConstraint("Session_DateRange_CK", "[StartDate] < [EndDate]");
             });
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
 
             builder.HasOne(builder => builder.Trainer)
                 .WithMany(t => t.Sessions)
@@ -32,6 +31,8 @@ namespace Gym.DataAccess.Data.Configuration
                 .WithMany(c => c.Sessions)
                 .HasForeignKey(s => s.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasQueryFilter(u => !u.IsDeleted);
+
 
         }
 

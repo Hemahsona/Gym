@@ -17,6 +17,8 @@ namespace Gym.DataAccess.Repositories
         private IRepository<Category> _categories;
         private ISessionRepository _session;
         private ITrainerReposatiory _trainers;
+        private IMemberShipRepository _memberShip;
+        private ISessionScheduleRepository _sessionSchedule;
 
 
         public IMemberRepository Members => _members ??= new MemberRepository(_dbContext);
@@ -27,8 +29,8 @@ namespace Gym.DataAccess.Repositories
         public IRepository<HealthRecord> HealthRecords => _healthRecords ??= new Repository<HealthRecord>(_dbContext);
         public IRepository<Category> Categories => _categories ??= new Repository<Category>(_dbContext);
         public ISessionRepository Sessions => _session ??= new SessionRepository(_dbContext);
-
-
+        public IMemberShipRepository MembersShips => _memberShip ??= new MemberShipRepository(_dbContext);
+        public ISessionScheduleRepository SessionSchedules => _sessionSchedule ??= new SessionScheduleRepository(_dbContext);
 
         public UnitOfWork(GymDBContext dbContext)
         {

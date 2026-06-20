@@ -26,6 +26,7 @@ namespace Gym.DataAccess.Data.Configuration
                 .HasForeignKey(ms => ms.PlanId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasQueryFilter(u => !u.IsDeleted);
 
 
         }

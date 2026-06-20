@@ -1,12 +1,15 @@
+using Gym.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.Persentaion.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IDashBoardService dashBoardService) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
-            return View();
+            var result = await dashBoardService.GetHomePageAsync(ct);
+
+            return View(result.value);
         }
 
         public IActionResult Privacy()

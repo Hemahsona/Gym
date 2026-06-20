@@ -8,8 +8,8 @@ namespace Gym.BusinessLogic.Services
 {
     public interface IMemberService
     {
-        public Task<IEnumerable<MemberIndexViewModel>> GetAllAsync(CancellationToken ct);
-        public Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct);
+        Task<IEnumerable<MemberIndexViewModel>> GetAllAsync(CancellationToken ct);
+        Task<Result> CreateAsync(CreateMemberViewModel model, CancellationToken ct);
         Task<MemberDetailsViewModel> GetDetailsAsync(int id,CancellationToken ct);
         Task<HealthRecordDetailsModelView> GetHealthRecordDetailsAsync(int id,CancellationToken ct);
         Task<EditMemberViewModel> GetForEditAsync(int id, CancellationToken ct);

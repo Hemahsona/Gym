@@ -7,6 +7,7 @@ namespace Gym.BusinessLogic.ViewModels.Session
 {
     public class SessionDetailsViewModel
     {
+        public int Id { get; set; }
         public string CategoryName { get; set; }
         public SessionStatus Status { get; set; }
         public string HeaderClass { get; set; }
