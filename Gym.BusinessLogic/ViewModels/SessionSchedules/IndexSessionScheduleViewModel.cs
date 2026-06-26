@@ -19,7 +19,19 @@ namespace Gym.BusinessLogic.ViewModels.SessionSchedule
         public string CategoryName { get; set; }
         public string DisplayDate => $"{StartDate:MMM dd yyyy}";
         public string Description { get; set; }
-        public SessionStatus Status { get; set; }
+        //public SessionStatus Status { get; set; }
+        public string Status
+        {
+            get
+            {
+                if (StartDate > DateTime.Now)
+                    return "Upcoming";
+                else if (StartDate <= DateTime.Now && EndDate >= DateTime.Now)
+                    return "Ongoing";
+                else
+                    return "Compeleted";
+            }
+        }
         public int Capacity { get; set; }
         public string BookedCount { get; set; }
         public string Duration

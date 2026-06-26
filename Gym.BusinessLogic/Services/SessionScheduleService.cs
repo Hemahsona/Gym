@@ -14,22 +14,8 @@ namespace Gym.BusinessLogic.Services
 
         public async Task<Result<IEnumerable<IndexSessionScheduleViewModel>>> GetAllAsync(CancellationToken ct)
         {
-            //var sessionSchedule = await unitOfWork.SessionSchedules.HasSessionAndMemebrAsync(includes: [ss => ss.Session.Category,  ss => ss.Session.Trainer]);
-            //Console.WriteLine(sessionSchedule.Count);
-            //var result = sessionSchedule.Select(s => new IndexSessionScheduleViewModel
-            //{
-            //    TrainerName = s.Session.Trainer.Name,
-            //    //PlanName = s.Session.Name
-            //    StartDate = s.Session.StartDate,
-            //    EndDate = s.Session.EndDate,
-            //    CategoryName = s.Session.Category.Name,
-            //    Description = s.Session.Description,
-            //    BookedCount = s.Session.Bookings.Count,
-            //    Capacity = s.Session.Capacity,
-            //});
-            //Console.WriteLine(result.Select(s => s.CategoryName));
-            //return Result<IEnumerable<IndexSessionScheduleViewModel>>.IsSuccess(result);
             var sessions = await unitOfWork.Sessions.HasTrainerAsync(includes: [s => s.Trainer, s => s.Category, s => s.Bookings], ct);
+            
             var result = sessions.Select(session => new IndexSessionScheduleViewModel
             {
                 Id = session.Id,
@@ -41,16 +27,24 @@ namespace Gym.BusinessLogic.Services
                 EndDate = session.EndDate,
                 Capacity = session.Capacity,
                 Speciality = session.Category.Name,
+                
             }).ToList();
             return Result<IEnumerable<IndexSessionScheduleViewModel>>.IsSuccess(result);
 
         }
         public async Task<Result> CreateAsync(CreateSessionScheduleViewModel model, CancellationToken ct = default)
         {
-            //if(await unitOfWork.Members.ExistsAsync(m => m.Id ==  ))
             var member = await unitOfWork.Members.GetAllAsync(ct);
-            var session = await unitOfWork.Sessions.GetByIdAsync(model.SessionId, trackChanger: true, cancellationToken: ct);
-            model.StartDate = DateTime.Now;
+            var session = await unitOfWork.Sessions.GetByIdAsync(model.SessionId, trackChanger: true, includes: [s => s.Bookings],cancellationToken: ct);
+            if (!await unitOfWork.MembersShips.ExistsAsync(ms => ms.MemberId == model.MemberId))
+                return Result.Failure("member dont has membership");
+            //if (await unitOfWork.Bookings.ExistsAsync(b => b.MemberId == model.MemberId))
+            //    return Result.Failure("member must has only one session");
+            var bookingCount = session.Bookings.Count();
+            if (bookingCount >= session.Capacity)
+                return Result.Failure("session compeleted");
+
+             model.StartDate = DateTime.Now;
             
             var result = new Booking
             {

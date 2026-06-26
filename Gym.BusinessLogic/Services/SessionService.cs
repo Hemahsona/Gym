@@ -99,6 +99,7 @@ namespace Gym.BusinessLogic.Services
 
             //var includes = new Expression<Func<Session, object>>[] { s => s.Trainer, s => s.Category, s => s.Bookings };
             var sessions = await unitOfWork.Sessions.HasTrainerAsync(includes: [s => s.Trainer, s => s.Category, s => s.Bookings],ct);
+            
             var result = sessions.Select(session => new SessionIndexViewModel
             {
                 Id = session.Id,
@@ -107,9 +108,10 @@ namespace Gym.BusinessLogic.Services
                 CategoryName = session.Category.Name,
                 BookedCount = session.Bookings.Count.ToString(),
                 StartDate = session.StartDate,
-                EndDate = session.StartDate,
+                EndDate = session.EndDate,
                 Capacity = session.Capacity,
                 Speciality = session.Category.Name,
+                
             }).ToList();
             return result;
         }

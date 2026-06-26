@@ -11,64 +11,83 @@
     @if (Model != null && Model.Any())
     {
 
-    <div class="row g-4 ">
+        <div class="row g-4 ">
 
-        @foreach (var item in Model)
-        {
-            <div class="col-12 col-md-6 col-lg-4">
+            @foreach (var item in Model)
+            {
+                if (item.Status == "Upcoming")
+
+                {
+
+                    <div class="col-12 col-md-6 col-lg-4">
 
 
-                <div class="card h-100 shadow-sm border-0 session-card">
-                    <div class="card-header text-white py-3 bg-primary ">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">
-                                <i class="bi bi-calendar-event me-2"></i>@item.Speciality
-                            </h5>
-                            <span class="badge bg-light text-dark">@item.Status</span>
+                        <div class="card h-100 shadow-sm border-0 session-card">
+                            <div class="card-header text-white py-3 @(item.Status == "Ongoing" ? "bg-success" : item.Status == "Upcoming" ? "bg-primary" : "bg-secondary") ">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-calendar-event me-2"></i>@item.Speciality
+                                    </h5>
+                                    <span class="badge bg-light text-dark">@item.Status</span>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <p class="text-muted mb-3">@item.Description</p>
+
+                                <div class="session-info mb-3">
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-person-circle text-primary-color me-2"></i>
+                                        <strong>TrainerName</strong> @item.TrainerName
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-calendar3 text-primary-color me-2"></i>
+                                        <strong>Date</strong> @item.DisplayDate
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-clock text-primary-color me-2"></i>
+                                        <strong>Time:</strong> @item.DisplayStartDate - @item.DisplayEndDate
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-hourglass-split text-primary-color me-2"></i>
+                                        <strong>Duration</strong> @item.Duration
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-people text-primary-color me-2"></i>
+                                        <strong>Capacity:</strong> @item.BookedCount/@item.Capacity slots
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-0">
+                                <div class="d-grid gap-2">
+                                    <a asp-action="UpcomingMember" asp-route-id="@item.Id" class="btn btn-outline btn-sm">
+                                        <i class="bi bi-eye me-1"></i> View Members
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                }
 
-                    <div class="card-body">
-                        <p class="text-muted mb-3">@item.Description</p>
+                @* else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-person-workspace display-1 text-muted"></i>
+                        <h4 class="mt-3 text-muted">No Bookings Available</h4>
+                        <p class="text-muted">Add your first booking to get started</p>
+                    </div>
+                } *@
 
-                        <div class="session-info mb-3">
-                            <div class="info-item mb-2">
-                                <i class="bi bi-person-circle text-primary-color me-2"></i>
-                                <strong>TrainerName</strong> @item.TrainerName
-                            </div>
-                            <div class="info-item mb-2">
-                                <i class="bi bi-calendar3 text-primary-color me-2"></i>
-                                <strong>Date</strong> @item.DisplayDate
-                            </div>
-                            <div class="info-item mb-2">
-                                <i class="bi bi-clock text-primary-color me-2"></i>
-                                <strong>Time:</strong> @item.DisplayStartDate - @item.DisplayEndDate
-                            </div>
-                            <div class="info-item mb-2">
-                                <i class="bi bi-hourglass-split text-primary-color me-2"></i>
-                                <strong>Duration</strong> @item.Duration
-                            </div>
-                            <div class="info-item">
-                                <i class="bi bi-people text-primary-color me-2"></i>
-                                <strong>Capacity:</strong> @item.BookedCount/@item.Capacity slots
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0">
-                        <div class="d-grid gap-2">
-                                <a asp-action="UpcomingMember" asp-route-id="@item.Id" class="btn btn-outline btn-sm">
-                                <i class="bi bi-eye me-1"></i> View Members
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
     }
     else
     {
-
+        @* <div class="text-center py-5">
+            <i class="bi bi-person-workspace display-1 text-muted"></i>
+            <h4 class="mt-3 text-muted">No Bookings Available</h4>
+            <p class="text-muted">Add your first booking to get started</p>
+        </div> *@
     }
 
     <header class="d-flex justify-content-between mt-5 mb-4 align-items-center">
@@ -79,66 +98,70 @@
     </header>
     @if (Model != null && Model.Any())
     {
-        
-    <div class="row g-4 ">
-        <div class="col-12 col-md-6 col-lg-4">
-                @foreach (var item in Model)
-                {
-                    
-                <div class="card h-100 shadow-sm border-0 session-card">
-                <div class="card-header text-white py-3 bg-success ">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="bi bi-calendar-event me-2"></i>Boxing
-                        </h5>
-                        <span class="badge bg-light text-dark">Ongoing</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted mb-3">Boxing Session Description</p>
 
-                    <div class="session-info mb-3">
-                        <div class="info-item mb-2">
-                            <i class="bi bi-person-circle text-primary-color me-2"></i>
-                            <strong>Trainer:</strong> @item.TrainerName
-                        </div>
-                        <div class="info-item mb-2">
-                            <i class="bi bi-calendar3 text-primary-color me-2"></i>
-                            <strong>Date:</strong> @item.DisplayDate
-                        </div>
-                        <div class="info-item mb-2">
-                            <i class="bi bi-clock text-primary-color me-2"></i>
-                            <strong>Time:</strong> 09:15 PM - 10:13 PM
-                        </div>
-                        <div class="info-item mb-2">
-                            <i class="bi bi-hourglass-split text-primary-color me-2"></i>
-                            <strong>Duration:</strong> 00:58:00
-                        </div>
-                        <div class="info-item">
-                            <i class="bi bi-people text-primary-color me-2"></i>
-                            <strong>Capacity:</strong> 11/12 slots slots
+        <div class="row g-4 ">
+            @foreach (var item in Model)
+            {
+                if (item.Status == "Ongoing")
+                {
+
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <div class="card h-100 shadow-sm border-0 session-card">
+                            <div class="card-header text-white py-3 bg-success ">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-calendar-event me-2"></i>@item.Speciality
+                                    </h5>
+                                    <span class="badge bg-light text-dark">Ongoing</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-3">@item.Description</p>
+
+                                <div class="session-info mb-3">
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-person-circle text-primary-color me-2"></i>
+                                        <strong>Trainer:</strong> @item.TrainerName
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-calendar3 text-primary-color me-2"></i>
+                                        <strong>Date:</strong> @item.DisplayDate
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-clock text-primary-color me-2"></i>
+                                        <strong>Time:</strong> @item.DisplayStartDate - @item.DisplayEndDate
+                                    </div>
+                                    <div class="info-item mb-2">
+                                        <i class="bi bi-hourglass-split text-primary-color me-2"></i>
+                                        <strong>Duration:</strong> @item.Duration
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-people text-primary-color me-2"></i>
+                                        <strong>Capacity:</strong> @item.BookedCount/@item.Capacity slots
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-0">
+                                <div class="d-grid gap-2">
+                                    <a asp-action="Ongoing" asp-route-id="@item.Id" class="btn btn-outline btn-sm">
+                                        <i class="bi bi-eye me-1"></i> View Members
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer bg-white border-0">
-                    <div class="d-grid gap-2">
-                                <a asp-action="Ongoing" asp-route-id="@item.Id" class="btn btn-outline btn-sm">
-                            <i class="bi bi-eye me-1"></i> View Members
-                        </a>
-                    </div>
-                </div>
-            </div>
                 }
+            }
         </div>
-    </div>
     }
     else
     {
-        
-    <div class="text-center py-5">
-        <i class="bi bi-calendar-x display-1 text-muted"></i>
-        <h4 class="mt-3 text-muted">No Sessions Available</h4>
-        <p class="text-muted">Create training session first to get started</p>
-    </div>
+
+        <div class="text-center py-5">
+            <i class="bi bi-calendar-x display-1 text-muted"></i>
+            <h4 class="mt-3 text-muted">No Sessions Available</h4>
+            <p class="text-muted">Create training session first to get started</p>
+        </div>
     }
 </div>

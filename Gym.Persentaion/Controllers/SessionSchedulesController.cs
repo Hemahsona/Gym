@@ -54,7 +54,7 @@ namespace Gym.Persentaion.Controllers
             {
                 ModelState.AddModelError(string.Empty, result.error!);
                 TempData["Error"] = "Booking Creation failed";
-                return View(model);
+                return RedirectToAction(nameof(Index));
             }
             TempData["Success"] = "Booking Creation succes";
             return RedirectToAction(nameof(Index));

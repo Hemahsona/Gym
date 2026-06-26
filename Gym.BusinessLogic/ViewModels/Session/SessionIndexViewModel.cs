@@ -13,7 +13,7 @@ namespace Gym.BusinessLogic.ViewModels.Session
         public string TrainerName { get; set; }
         public string Description { get; set; } = null!;
         public string BookedCount { get; set; }
-        public SessionStatus Status { get; set; }
+        //public SessionStatus Status { get; set; }
 
         public int Capacity { get; set; }
 
@@ -30,12 +30,24 @@ namespace Gym.BusinessLogic.ViewModels.Session
                 return $"{(int)duration.TotalHours} Hours {duration.Minutes} Minutes";
             }
         }
-        public string TimeRangeDisplay => $"{StartDate: hh:mm tt}"; 
-        public string HeaderClass => Status switch
+        public string TimeRangeDisplay => $"{StartDate: hh:mm tt}";
+        //public string HeaderClass => Status switch
+        //{
+        //    SessionStatus.Upcoming => "bg-primary",
+        //    SessionStatus.Ongoing => "bg-success",
+        //    SessionStatus.Compeleted => "bg-secondary",
+        //};
+        public string Status
         {
-            SessionStatus.Upcoming => "bg-primary",
-            SessionStatus.Ongoing => "bg-success",
-            SessionStatus.Compeleted => "bg-secondary",
-        };
+            get
+            {
+                if (StartDate > DateTime.Now)
+                    return "Upcoming";
+                else if (StartDate <= DateTime.Now && EndDate >= DateTime.Now)
+                    return "Ongoing";
+                else
+                    return "Compeleted";
+            }
+        }
     }
 }
