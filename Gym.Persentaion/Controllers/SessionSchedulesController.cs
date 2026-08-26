@@ -12,7 +12,7 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             var sessionSchedules = await sessionSchedule.GetAllAsync(ct);
-            return View(sessionSchedules.value);
+            return View(sessionSchedules.Value);
         }
         public async Task<IActionResult> UpcomingMember(int id, CancellationToken ct)
         {
@@ -21,8 +21,8 @@ namespace Gym.Persentaion.Controllers
             var session = await sessionSchedule.GetSessionById(id, ct);
             var result = new UpcomingMemberPageViewModel
             {
-                Bookings = booking.value.ToList(),
-                Session = session.value
+                Bookings = booking.Value.ToList(),
+                Session = session.Value
             };
             return View(result);
         }
@@ -39,8 +39,8 @@ namespace Gym.Persentaion.Controllers
             //model.SessionId = session.value.Id;
             var member = await sessionSchedule.GetMemberAsync(ct);
 
-            model.Members = member.value;
-            ViewBag.Members = new SelectList(member.value, "Id", "Name");
+            model.Members = member.Value;
+            ViewBag.Members = new SelectList(member.Value, "Id", "Name");
             return View(model);
         }
 
@@ -50,9 +50,9 @@ namespace Gym.Persentaion.Controllers
             Console.WriteLine($"SessionId = {model.SessionId}");
             Console.WriteLine($"MemberId = {model.MemberId}");
             var result = await sessionSchedule.CreateAsync(model, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "Booking Creation failed";
                 return RedirectToAction(nameof(Index));
             }
@@ -66,29 +66,29 @@ namespace Gym.Persentaion.Controllers
             var booking = await sessionSchedule.GetBookingByIdAsync(id, ct);
             if (booking == null)
                 return NotFound();
-            ViewBag.id = booking.value.Id;
-            return View(booking.value);
+            ViewBag.id = booking.Value.Id;
+            return View(booking.Value);
         }
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken ct)
         {
             var result = await sessionSchedule.DeleteAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error);
+                ModelState.AddModelError(string.Empty, result.Error);
                 TempData["Error"] = "Booking deletion failed";
                 return RedirectToAction(nameof(UpcomingMemberPageViewModel));
             }
             TempData["Success"] = "Booking deletion succes";
             return RedirectToAction(nameof(UpcomingMember),
-                new {id = result.value});
+                new {id = result.Value});
         }
 
         public async Task<IActionResult> Ongoing(int id, CancellationToken ct)
         {
             var booking = await sessionSchedule.GetOngoingByBookingId(id, ct);
             var session = await sessionSchedule.GetSessionById(id, ct);
-            return View(booking.value);
+            return View(booking.Value);
         }
 
         [HttpPost]

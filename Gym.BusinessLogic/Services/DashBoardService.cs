@@ -10,7 +10,7 @@ namespace Gym.BusinessLogic.Services
     {
         public async Task<Result<HomeDasgBoardViewModel>> GetHomePageAsync(CancellationToken ct = default)
         {
-            return Result<HomeDasgBoardViewModel>.IsSuccess(new HomeDasgBoardViewModel
+            return Result<HomeDasgBoardViewModel>.Success(new HomeDasgBoardViewModel
             {
                 TotalMembers = await unitOfWork.Members.CountAsync(cancellationToken: ct),
                 Trainers = await unitOfWork.Trainers.CountAsync(cancellationToken: ct),

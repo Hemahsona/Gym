@@ -17,20 +17,7 @@ namespace Gym.BusinessLogic.Services
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<IEnumerable<TrainerIndexViewModel>> GetAllAsync(CancellationToken ct)
-        {
-            var trainers = await _unitOfWork.Trainers.GetAllAsync(ct);
-            return trainers.Select(t => new TrainerIndexViewModel
-            {
 
-                Id = t.Id,
-                Name = t.Name,
-                Email = t.Email,
-                Phone = t.Phone,
-                Specialties = t.Specialties.ToString(),
-
-            });
-        }
         public async Task<Result> CreateAsync(TrainerCreateViewModel model, CancellationToken ct)
         {
             if (await unitOfWork.Trainers.IsEmailExists(model.Email, null, ct))
@@ -65,6 +52,21 @@ namespace Gym.BusinessLogic.Services
 
         }
 
+        public async Task<IEnumerable<TrainerIndexViewModel>> GetAllAsync(CancellationToken ct)
+        {
+            var trainers = await _unitOfWork.Trainers.GetAllAsync(ct);
+            return trainers.Select(t => new TrainerIndexViewModel
+            {
+
+                Id = t.Id,
+                Name = t.Name,
+                Email = t.Email,
+                Phone = t.Phone,
+                Specialties = t.Specialties.ToString(),
+
+            });
+        }
+
         public async Task<Result<TrainerDetailsViewModel>> GetDetailsAsync(int id, CancellationToken ct)
         {
             var trainer = await _unitOfWork.Trainers.GetByIdAsync(id, trackChanger: false);
@@ -79,7 +81,7 @@ namespace Gym.BusinessLogic.Services
                 Address = $"{trainer.Address.BuildingNumber}-{trainer.Address.Street}-{trainer.Address.City}",
             };
 
-            return Result<TrainerDetailsViewModel>.IsSuccess(result);
+            return Result<TrainerDetailsViewModel>.Success(result);
         }
 
         public async Task<Result<TrainerEditViewModel>> GetForEditAsync(int id, CancellationToken ct)
@@ -95,7 +97,7 @@ namespace Gym.BusinessLogic.Services
                 City = result.Address.City,
                 Specialties = result.Specialties
             };
-            return Result<TrainerEditViewModel>.IsSuccess(trainer);
+            return Result<TrainerEditViewModel>.Success(trainer);
         }
 
         public async Task<Result> EditAsync(TrainerEditViewModel model, int id,CancellationToken ct)

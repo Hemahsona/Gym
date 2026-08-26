@@ -39,30 +39,5 @@ namespace Gym.DataAccess.Data.Context
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<HealthRecord> HealthRecords { get; set; }
 
-        //public override int SaveChanges()
-        //{
-        //    var entries = ChangeTracker
-        //        .Entries<BaseEntity>();
-
-        //    foreach (var entry in entries)
-        //    {
-        //        if (entry.State == EntityState.Added)
-        //            entry.Entity.CreatedAt = DateTime.UtcNow;
-
-
-        //        if (entry.State == EntityState.Modified)
-        //            entry.Entity.UpdatedAt = DateTime.UtcNow;
-
-
-        //        if (entry.State == EntityState.Deleted)
-        //            entry.Entity.DeletedAt = DateTime.UtcNow;
-
-        //        if (entry.State == EntityState.Deleted)
-        //            entry.Entity.IsDeleted = true;
-
-        //    }
-
-        //    return base.SaveChanges();
-        //}
     }
 }

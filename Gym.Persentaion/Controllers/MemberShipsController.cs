@@ -10,7 +10,7 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             var memberShips = await memberShip.GetAllAsync(ct);
-            return View(memberShips.value);
+            return View(memberShips.Value);
         }
 
         [HttpGet]
@@ -19,10 +19,10 @@ namespace Gym.Persentaion.Controllers
             var model = new CreateMemberShipViewModel();
             var memberResult = await memberShip.GetMemberLockupAsync(ct);
             var planResult = await memberShip.GetPlanLockupAsync(ct);
-            model.Members = memberResult.value;
-            model.Plans = planResult.value;
-            ViewBag.Members = new SelectList(memberResult.value, "Id", "Name");
-            ViewBag.Plans = new SelectList(planResult.value, "Id", "Name");
+            model.Members = memberResult.Value;
+            model.Plans = planResult.Value;
+            ViewBag.Members = new SelectList(memberResult.Value, "Id", "Name");
+            ViewBag.Plans = new SelectList(planResult.Value, "Id", "Name");
             return View(model);
         }
         [HttpPost]
@@ -30,9 +30,9 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Create(CreateMemberShipViewModel model, CancellationToken ct)
         {
             var result = await memberShip.CreateAsync(model, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "memebrShip Creation failed";
                 return RedirectToAction(nameof(Index));
             }
@@ -46,16 +46,16 @@ namespace Gym.Persentaion.Controllers
             var deletedmembership = await memberShip.GetById(id, ct);
             if (deletedmembership == null)
                 return NotFound();
-            ViewBag.id = deletedmembership.value.Id;
-            return View(deletedmembership.value);
+            ViewBag.id = deletedmembership.Value.Id;
+            return View(deletedmembership.Value);
         }
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed( int id, CancellationToken ct)
         {
             var result = await memberShip.DeleteAsync( id, ct);
-            if(!result.success)
+            if(!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error);
+                ModelState.AddModelError(string.Empty, result.Error);
                 TempData["Error"] = "memebrShip deletion failed";
                 return RedirectToAction(nameof(Index));
             }

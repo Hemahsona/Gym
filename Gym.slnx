@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Tests/">
+    <Project Path="TestProject/BusinessLogicTest.csproj" Id="52744314-24be-420c-bac6-07abc9214d97" />
+  </Folder>
   <Project Path="Gym.BusinessLogic/Gym.BusinessLogic.csproj" />
   <Project Path="Gym.DataAccess/Gym.DataAccess.csproj" />
   <Project Path="Gym.Persentaion/Gym.Persentaion.csproj" />

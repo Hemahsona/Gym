@@ -9,7 +9,7 @@ namespace Gym.Persentaion.Controllers
         {
             var result = await dashBoardService.GetHomePageAsync(ct);
 
-            return View(result.value);
+            return View(result.Value);
         }
 
         public IActionResult Privacy()

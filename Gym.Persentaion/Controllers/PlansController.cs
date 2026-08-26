@@ -16,27 +16,27 @@ namespace Gym.Persentaion.Controllers
             var result = await plan.GetAllAsync(id, ct);
 
 
-            return View(result.value); 
+            return View(result.Value); 
         }
 
         public async Task<IActionResult> Details(int id, CancellationToken ct)
         {
 
             var result = await plan.GetDetailsAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
                 return NotFound();
             }
-            return View(result.value);
+            return View(result.Value);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id, CancellationToken ct)
         {
             var result = await plan.GetForUpdate(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
                 return RedirectToAction(nameof(Index));
-            return View(result.value);
+            return View(result.Value);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(EditPlanViewModel model, int id, CancellationToken ct)
@@ -44,9 +44,9 @@ namespace Gym.Persentaion.Controllers
             var result = await plan.EditAsync(model, id, ct);
             if (!ModelState.IsValid)
                 return View(model);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "Plan edit failed";
                 return View(model);
             }
@@ -59,9 +59,9 @@ namespace Gym.Persentaion.Controllers
         {
             var result = await plan.ToggleAsync(id, ct);
 
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "Cant chnage active plan";
                 return View();
             }

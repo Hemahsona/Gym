@@ -24,9 +24,9 @@ namespace Gym.Persentaion.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             Result result = await trainer.CreateAsync(model, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "trainer creation failed";
                 return View(model);
             }
@@ -38,17 +38,17 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Details(int id, CancellationToken ct)
         {
             var result = await trainer.GetDetailsAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
                 return NotFound();
-            return View(result.value);
+            return View(result.Value);
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id, CancellationToken ct)
         {
             var result = await trainer.GetForEditAsync(id, ct);
-            if(!result.success)
+            if(!result.IsSuccess)
                 return RedirectToAction(nameof(Index));
-            return View(result.value);
+            return View(result.Value);
         }
 
         [HttpPost]
@@ -58,9 +58,9 @@ namespace Gym.Persentaion.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             var result = await trainer.EditAsync(model, id, ct);
-            if(!result.success)
+            if(!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "trainer edit failed";
                 return View(model);
             }
@@ -74,7 +74,7 @@ namespace Gym.Persentaion.Controllers
             var result = await trainer.GetDetailsAsync(id, ct);
             if (result == null)
                 return NotFound();
-            ViewBag.id = result.value.Id;
+            ViewBag.id = result.Value.Id;
             return View();
         }
 
@@ -84,9 +84,9 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken ct)
         {
             var result = await trainer.DeleteAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "trainer deletion failed";
                 return View();
             }

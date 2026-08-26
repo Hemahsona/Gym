@@ -17,7 +17,6 @@ namespace Gym.DataAccess.Repositories
         public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
             => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
-
         public async Task<TEntity> GetByIdAsync(int id,bool trackChanges = true, Expression<Func<TEntity, object>>[]? includes = default, CancellationToken cancellationToken = default)
             => await ApplyInclude(_dbSet.AsQueryable(), includes).FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 

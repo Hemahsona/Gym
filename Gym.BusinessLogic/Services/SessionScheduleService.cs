@@ -29,7 +29,7 @@ namespace Gym.BusinessLogic.Services
                 Speciality = session.Category.Name,
                 
             }).ToList();
-            return Result<IEnumerable<IndexSessionScheduleViewModel>>.IsSuccess(result);
+            return Result<IEnumerable<IndexSessionScheduleViewModel>>.Success(result);
 
         }
         public async Task<Result> CreateAsync(CreateSessionScheduleViewModel model, CancellationToken ct = default)
@@ -74,7 +74,7 @@ namespace Gym.BusinessLogic.Services
                 StartDate = bookings.Date,
             });
 
-            return Result<IEnumerable<UpcomingMemberSessionScheduleViewModel>>.IsSuccess(result);
+            return Result<IEnumerable<UpcomingMemberSessionScheduleViewModel>>.Success(result);
         }
 
         public async Task<Result<IReadOnlyList<MemberLockupItem>>> GetMemberAsync(CancellationToken ct = default)
@@ -85,7 +85,7 @@ namespace Gym.BusinessLogic.Services
                 Id = m.Id,
                 Name = m.Name,
             }).ToList();
-            return Result<IReadOnlyList<MemberLockupItem>>.IsSuccess(result);
+            return Result<IReadOnlyList<MemberLockupItem>>.Success(result);
         }
 
         public async Task<Result<UpcomingSessionMemberSessionScheduleViewModel>> GetSessionById(int id, CancellationToken ct)
@@ -95,7 +95,7 @@ namespace Gym.BusinessLogic.Services
             {
                 Id = session.Id,
             };
-            return Result<UpcomingSessionMemberSessionScheduleViewModel>.IsSuccess(result);
+            return Result<UpcomingSessionMemberSessionScheduleViewModel>.Success(result);
         }
 
         public async Task<Result<int>> DeleteAsync(int id, CancellationToken ct)
@@ -105,7 +105,7 @@ namespace Gym.BusinessLogic.Services
             int sessionId = result.SessionId;
             unitOfWork.SessionSchedules.SoftDelete(result);
             await unitOfWork.SaveChangesAsync(ct);
-            return Result<int>.IsSuccess(sessionId);
+            return Result<int>.Success(sessionId);
         }
 
         public async Task<Result<UpcomingMemberSessionScheduleViewModel>> GetBookingByIdAsync(int id, CancellationToken ct)
@@ -117,7 +117,7 @@ namespace Gym.BusinessLogic.Services
                 Name = bookings.Member.Name,
                 StartDate = bookings.Date,
             };
-            return Result<UpcomingMemberSessionScheduleViewModel>.IsSuccess(result);
+            return Result<UpcomingMemberSessionScheduleViewModel>.Success(result);
         }
 
         public async Task<Result<IEnumerable<OngoingMemberSessionScheduleViewModel>>> GetOngoingByBookingId(int id, CancellationToken ct = default)
@@ -129,7 +129,7 @@ namespace Gym.BusinessLogic.Services
                 MemberName = b.Member.Name,
                 Attendence = b.IsAttented,
             });
-            return Result<IEnumerable<OngoingMemberSessionScheduleViewModel>>.IsSuccess(result);
+            return Result<IEnumerable<OngoingMemberSessionScheduleViewModel>>.Success(result);
         }
 
         public async Task<Result> ToggleAttendanceAsync(int id, OngoingMemberSessionScheduleViewModel model, CancellationToken ct = default)

@@ -21,7 +21,7 @@ namespace Gym.BusinessLogic.Services
                 IsActive = p.IsActive
             });
 
-            return Result<IEnumerable<IndexPlanViewModel>>.IsSuccess(model);
+            return Result<IEnumerable<IndexPlanViewModel>>.Success(model);
         }
         
         public async Task<Result<EditPlanViewModel>> GetForUpdate(int id, CancellationToken ct)
@@ -35,7 +35,7 @@ namespace Gym.BusinessLogic.Services
                 Price = plan.Price,
                 DurationDays = plan.DurationDays,
             };
-            return Result<EditPlanViewModel>.IsSuccess(model);
+            return Result<EditPlanViewModel>.Success(model);
         }
 
         public async Task<Result> EditAsync(EditPlanViewModel model, int id, CancellationToken ct)
@@ -65,7 +65,7 @@ namespace Gym.BusinessLogic.Services
                 Description = plan.Description,
                 IsActive = plan.IsActive,
             };
-            return Result<DetailsPalnViewModel>.IsSuccess(result);
+            return Result<DetailsPalnViewModel>.Success(result);
         }
 
         public async Task<Result> ToggleAsync(int id, CancellationToken ct)

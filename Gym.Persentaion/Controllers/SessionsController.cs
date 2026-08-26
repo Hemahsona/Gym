@@ -20,11 +20,11 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> Details(int id, CancellationToken ct)
         {
             var result = await sessionService.GetDetailsAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
                 return NotFound();
             }
-            return View(result.value);
+            return View(result.Value);
         }
 
         [HttpGet]
@@ -33,8 +33,8 @@ namespace Gym.Persentaion.Controllers
             var model = new SessionCreateViewModel();
             var categoriesResult = await sessionService.GetGategoryAsync(ct);
             var trainersResult = await sessionService.GetTrainersAsync(id, ct);
-            model.Categories = categoriesResult.value ?? [];
-            model.Trainers = trainersResult.value ?? [];
+            model.Categories = categoriesResult.Value ?? [];
+            model.Trainers = trainersResult.Value ?? [];
             return View(model);
         }
 
@@ -65,13 +65,13 @@ namespace Gym.Persentaion.Controllers
             var result = await sessionService.GetForEditAsync(id);
             var trainersResult = await sessionService.GetTrainersAsync(id, ct);
             var gategoryResult = await sessionService.GetGategoryAsync(ct);
-            model.Trainers = trainersResult.value;
-            model.Categories = gategoryResult.value;
+            model.Trainers = trainersResult.Value;
+            model.Categories = gategoryResult.Value;
             //Console.WriteLine(model.Trainers?.Count);
             //Console.WriteLine(model.Categories?.Count);
-            ViewBag.Trainers = new SelectList( trainersResult.value,"Id","Name");
-            ViewBag.Gategory = new SelectList(gategoryResult.value, "Id", "Name");
-            return View(result.value);
+            ViewBag.Trainers = new SelectList( trainersResult.Value,"Id","Name");
+            ViewBag.Gategory = new SelectList(gategoryResult.Value, "Id", "Name");
+            return View(result.Value);
         }
 
 
@@ -83,9 +83,9 @@ namespace Gym.Persentaion.Controllers
             if(ModelState.IsValid)
                 return View(model);
             var result = await sessionService.EditAsync(model, id,ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.error!);
+                ModelState.AddModelError(string.Empty, result.Error!);
                 TempData["Error"] = "Session edit failed";
                 var gategoryResult = await sessionService.GetGategoryAsync(ct);
                 var trainersResult = await sessionService.GetTrainersAsync(id, ct);
@@ -103,7 +103,7 @@ namespace Gym.Persentaion.Controllers
             var deletedSession = await sessionService.GetDetailsAsync(id, ct);
             if (deletedSession == null)
                 return NotFound();
-            ViewBag.id = deletedSession.value.Id;
+            ViewBag.id = deletedSession.Value.Id;
             return View();
         }
 
@@ -113,7 +113,7 @@ namespace Gym.Persentaion.Controllers
         public async Task<IActionResult> DeleteConfirmed([FromRoute] int id, CancellationToken ct)
         {
             Result result = await sessionService.DeleteAsync(id, ct);
-            if (!result.success)
+            if (!result.IsSuccess)
             {
                 TempData["Error"] = "session deletion failed";
                 return View();

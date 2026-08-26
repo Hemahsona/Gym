@@ -22,28 +22,20 @@ namespace Gym.BusinessLogic.Services
                 Id = c.Id,
                 Name = c.Name,
             }).ToList();
-            return Result<IReadOnlyList<CategoryLockupItem>>.IsSuccess(items);
+            return Result<IReadOnlyList<CategoryLockupItem>>.Success(items);
         }
 
         public async Task<Result<IReadOnlyList<TrainerLockupItem>>> GetTrainersAsync(int id, CancellationToken ct = default)
         {
-            //var category = await unitOfWork.Categories.GetByIdAsync(id, trackChanger: false);
-            //if (category is null)
-                //return Result<IReadOnlyList<TrainerLockupItem>>.Failure("category Not Found");
+
             var trainers = await unitOfWork.Trainers.GetAllAsync(ct);
-            //var items = trainers
-            //    .Where(t => t.Specialties == category.specialties)
-            //    .Select(t => new TrainerLockupItem
-            //    {
-            //        Id = t.Id,
-            //        Name = t.Name,
-            //    }).ToList();
+
             var items = trainers.Select(t => new TrainerLockupItem
             {
                 Id = t.Id,
                 Name = t.Name,
             }).ToList();
-            return Result<IReadOnlyList<TrainerLockupItem>>.IsSuccess(items);
+            return Result<IReadOnlyList<TrainerLockupItem>>.Success(items);
         }
 
         public async Task<Result> CreateAsync(SessionCreateViewModel model, CancellationToken ct = default)
@@ -82,14 +74,11 @@ namespace Gym.BusinessLogic.Services
                 CategoryName = session.Category.Name,
                 Description = session.Description,
                 EndDate = session.EndDate,
-                //HeaderClass = session.HeaderClass,
-                //MaxCapacity = session.MaxCapacity,
                 StartDate = session.StartDate,
-                //Status = session.Status,
                 TrainerName = session.Trainer.Name,
                 BookedCount = session.Bookings.Count(),
             };
-            return Result<SessionDetailsViewModel>.IsSuccess(result);
+            return Result<SessionDetailsViewModel>.Success(result);
         }
 
 
@@ -97,7 +86,6 @@ namespace Gym.BusinessLogic.Services
         public async Task<IReadOnlyList<SessionIndexViewModel>> GetIndexItemsAsync(CancellationToken ct = default)
         {
 
-            //var includes = new Expression<Func<Session, object>>[] { s => s.Trainer, s => s.Category, s => s.Bookings };
             var sessions = await unitOfWork.Sessions.HasTrainerAsync(includes: [s => s.Trainer, s => s.Category, s => s.Bookings],ct);
             
             var result = sessions.Select(session => new SessionIndexViewModel
@@ -131,12 +119,10 @@ namespace Gym.BusinessLogic.Services
             if (!await unitOfWork.Trainers.ExistsAsync(t => t.Id == model.TrainerId))
                 return Result.Failure("Trainer not found.");
 
-            // Optional: verify category still exists
             var category = await unitOfWork.Categories.GetByIdAsync(session.CategoryId, trackChanger: true);
             if (category == null)
                 return Result.Failure("Category not found.");
 
-            // Update the fetched entity instead of creating a new one
             session.Description = model.Description;
             session.Capacity = model.Capacity;
             session.StartDate = model.StartDate;
@@ -164,7 +150,7 @@ namespace Gym.BusinessLogic.Services
 
 
             };
-            return Result<SessionEditViewModel>.IsSuccess(model);
+            return Result<SessionEditViewModel>.Success(model);
         }
 
         public async Task<Result> DeleteAsync(int id, CancellationToken ct = default)
@@ -172,7 +158,6 @@ namespace Gym.BusinessLogic.Services
             var sesssion = await unitOfWork.Sessions.GetByIdIncludingDeletedAsync(id,ct);
 
             if (sesssion is null) return Result.Failure("session not found");
-            //if(sesssion.Bookings.Count > 0) return 
             unitOfWork.Sessions.SoftDelete(sesssion);
             await unitOfWork.Sessions.SaveChangesAsync(ct);
             return Result.Success();

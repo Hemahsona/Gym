@@ -17,7 +17,7 @@ namespace Gym.BusinessLogic.Services
                 Id = m.Id,
                 Name = m.Name,
             }).ToList();
-            return Result<IReadOnlyList<MemberLockupItem>>.IsSuccess(result);
+            return Result<IReadOnlyList<MemberLockupItem>>.Success(result);
         }
         public async Task<Result<IReadOnlyList<PlanLockupItem>>> GetPlanLockupAsync(CancellationToken ct)
         {
@@ -27,7 +27,7 @@ namespace Gym.BusinessLogic.Services
                 Id = p.Id,
                 Name = p.Name,
             }).ToList();
-            return Result<IReadOnlyList<PlanLockupItem>>.IsSuccess(result);
+            return Result<IReadOnlyList<PlanLockupItem>>.Success(result);
 
         }
 
@@ -74,7 +74,7 @@ namespace Gym.BusinessLogic.Services
                 EndDate = ms.StartDate.AddDays(ms.Plan.DurationDays),
                 Price = ms.Plan.Price,                
             });
-            return Result<IEnumerable<IndexMemberShipViewModel>>.IsSuccess(result);
+            return Result<IEnumerable<IndexMemberShipViewModel>>.Success(result);
         }
 
         public async Task<Result> DeleteAsync(int id, CancellationToken ct)
@@ -104,7 +104,7 @@ namespace Gym.BusinessLogic.Services
                 Id = membership.Id,
             };
             //if (result is null) return Result<IndexMemberShipViewModel>.Failure("session not found");
-            return Result<IndexMemberShipViewModel>.IsSuccess(result);
+            return Result<IndexMemberShipViewModel>.Success(result);
         }
     }
 }
